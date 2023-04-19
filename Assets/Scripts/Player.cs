@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
         jump = actions.Player.Jump;
 
         move.Enable();
-        // fire.Enable();
+        fire.Enable();
         jump.Enable();
 
         move.performed += Movement;
