@@ -46,7 +46,6 @@ public class Player : MonoBehaviour
         fire.canceled += Fire;
 
         jump.performed += Jump;
-        // jump.canceled += Jump;
 
         rb = GetComponent<Rigidbody2D>();
     }
@@ -57,10 +56,21 @@ public class Player : MonoBehaviour
         GroundedCheck();
     }
 
+    void FixedUpdate()
+    {
+        // rb.MovePosition(Vector2.Lerp((Vector2)transform.position, (Vector2)transform.position + movementVector, speed)); // (Vector2)transform.position + (movementVector * speed)
+        Move();
+    }
+
     private void GroundedCheck()
     {
-        RaycastHit2D ray = Physics2D.CircleCast(transform.position, rayCastCircleRadius, Vector2.down, rayCastDistance, layerMask);
+        RaycastHit2D ray = Physics2D.CircleCast(transform.position, 
+                                                rayCastCircleRadius, 
+                                                Vector2.down, 
+                                                rayCastDistance, 
+                                                layerMask);
         Debug.Log(ray.collider);
+
         if (ray.collider)
         {
             if (ray.collider.tag == "Ground")
@@ -80,21 +90,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        // rb.MovePosition(Vector2.Lerp((Vector2)transform.position, (Vector2)transform.position + movementVector, speed)); // (Vector2)transform.position + (movementVector * speed)
-        Move();
-    }
-
     private void Move()
     {
         rb.AddForce(movementVector * speed, ForceMode2D.Impulse);
+        
         if (rb.velocity.x > maxVelocityCap || rb.velocity.x < -maxVelocityCap)
         {
             rb.velocity = new Vector2(Mathf.Clamp(rb.velocity.x, 
                                     -maxVelocityCap, maxVelocityCap), 
                                     rb.velocity.y);
         }
+
         if (Math.Abs(movementVector.x) < 0.1f)
         {
             rb.velocity = Vector2.Lerp(new Vector2(rb.velocity.x, rb.velocity.y),
@@ -108,7 +114,7 @@ public class Player : MonoBehaviour
         movementVector = context.ReadValue<Vector2>();
         Debug.Log("IN MOVE");
     }
-
+    
     private void Fire(InputAction.CallbackContext context)
     {
         if(context.performed)
