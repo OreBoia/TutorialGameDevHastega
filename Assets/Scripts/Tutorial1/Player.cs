@@ -77,16 +77,12 @@ public class Player : MonoBehaviour
             {
                 grounded = true;
                 speed = speedOnGround;
-                // rb.gravityScale = 1f;
-                // move.Enable();
             }
         }
         else
         {
-            // move.Disable();
             grounded = false;
             speed = speedOnAir;
-            // rb.gravityScale = 8f;
         }
     }
 
@@ -142,16 +138,9 @@ public class Player : MonoBehaviour
         if(grounded)
         {
             rb.AddForce(Vector2.up * jumpForce, jumpForceMode);
-            // rb.AddForce(Vector2.right * rb.gravityScale * jumpForce, ForceMode2D.Force);
             Debug.Log($"JUMP");
         }
     }
-
-    // private void OnMove(InputValue inputMove) //EASY METHOD
-    // {
-    //     movementVector = inputMove.Get<Vector2>();
-    //     Debug.Log("IM SPEED");
-    // } 
 
     void OnDrawGizmos()
     {
