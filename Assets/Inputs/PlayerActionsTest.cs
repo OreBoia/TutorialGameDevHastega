@@ -53,15 +53,6 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""StartActionEvent"",
-                    ""type"": ""Button"",
-                    ""id"": ""669f7b4f-821b-4178-bbcc-20eb1ac1ae8f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -119,15 +110,92 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Player2"",
+            ""id"": ""ac30fa53-adf5-422f-9913-c3dfc725557a"",
+            ""actions"": [
+                {
+                    ""name"": ""StartActionEvent"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb735d96-5005-42b9-8a37-d3b04d8cf68b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d58ef13-157c-4f59-9c78-7ba36386f48c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Idle"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ae501f7-dd59-4140-864b-3f2013e4cbfa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e49cacf-a0bd-45d1-b283-eb0d89326bbc"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""00ed4b46-aa2d-45e1-9f61-be2cfbd4f44a"",
+                    ""id"": ""50771819-4a26-4e39-b56b-6222308db684"",
                     ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""StartActionEvent"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8a5f322-2bff-4e50-b61e-d13919a0fd9d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89d36c1b-036d-46b8-85d1-03d1be222e20"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Idle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4624ff6-f850-4050-b392-98e9aad038db"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -141,7 +209,12 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_StartActionEvent = m_Player.FindAction("StartActionEvent", throwIfNotFound: true);
+        // Player2
+        m_Player2 = asset.FindActionMap("Player2", throwIfNotFound: true);
+        m_Player2_StartActionEvent = m_Player2.FindAction("StartActionEvent", throwIfNotFound: true);
+        m_Player2_Attack = m_Player2.FindAction("Attack", throwIfNotFound: true);
+        m_Player2_Idle = m_Player2.FindAction("Idle", throwIfNotFound: true);
+        m_Player2_Run = m_Player2.FindAction("Run", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -206,7 +279,6 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_StartActionEvent;
     public struct PlayerActions
     {
         private @PlayerActionsTest m_Wrapper;
@@ -214,7 +286,6 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @StartActionEvent => m_Wrapper.m_Player_StartActionEvent;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -233,9 +304,6 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @StartActionEvent.started += instance.OnStartActionEvent;
-            @StartActionEvent.performed += instance.OnStartActionEvent;
-            @StartActionEvent.canceled += instance.OnStartActionEvent;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -249,9 +317,6 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @StartActionEvent.started -= instance.OnStartActionEvent;
-            @StartActionEvent.performed -= instance.OnStartActionEvent;
-            @StartActionEvent.canceled -= instance.OnStartActionEvent;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -269,11 +334,87 @@ public partial class @PlayerActionsTest: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Player2
+    private readonly InputActionMap m_Player2;
+    private List<IPlayer2Actions> m_Player2ActionsCallbackInterfaces = new List<IPlayer2Actions>();
+    private readonly InputAction m_Player2_StartActionEvent;
+    private readonly InputAction m_Player2_Attack;
+    private readonly InputAction m_Player2_Idle;
+    private readonly InputAction m_Player2_Run;
+    public struct Player2Actions
+    {
+        private @PlayerActionsTest m_Wrapper;
+        public Player2Actions(@PlayerActionsTest wrapper) { m_Wrapper = wrapper; }
+        public InputAction @StartActionEvent => m_Wrapper.m_Player2_StartActionEvent;
+        public InputAction @Attack => m_Wrapper.m_Player2_Attack;
+        public InputAction @Idle => m_Wrapper.m_Player2_Idle;
+        public InputAction @Run => m_Wrapper.m_Player2_Run;
+        public InputActionMap Get() { return m_Wrapper.m_Player2; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(Player2Actions set) { return set.Get(); }
+        public void AddCallbacks(IPlayer2Actions instance)
+        {
+            if (instance == null || m_Wrapper.m_Player2ActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_Player2ActionsCallbackInterfaces.Add(instance);
+            @StartActionEvent.started += instance.OnStartActionEvent;
+            @StartActionEvent.performed += instance.OnStartActionEvent;
+            @StartActionEvent.canceled += instance.OnStartActionEvent;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
+            @Idle.started += instance.OnIdle;
+            @Idle.performed += instance.OnIdle;
+            @Idle.canceled += instance.OnIdle;
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
+        }
+
+        private void UnregisterCallbacks(IPlayer2Actions instance)
+        {
+            @StartActionEvent.started -= instance.OnStartActionEvent;
+            @StartActionEvent.performed -= instance.OnStartActionEvent;
+            @StartActionEvent.canceled -= instance.OnStartActionEvent;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
+            @Idle.started -= instance.OnIdle;
+            @Idle.performed -= instance.OnIdle;
+            @Idle.canceled -= instance.OnIdle;
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
+        }
+
+        public void RemoveCallbacks(IPlayer2Actions instance)
+        {
+            if (m_Wrapper.m_Player2ActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPlayer2Actions instance)
+        {
+            foreach (var item in m_Wrapper.m_Player2ActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_Player2ActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public Player2Actions @Player2 => new Player2Actions(this);
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+    }
+    public interface IPlayer2Actions
+    {
         void OnStartActionEvent(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnIdle(InputAction.CallbackContext context);
+        void OnRun(InputAction.CallbackContext context);
     }
 }

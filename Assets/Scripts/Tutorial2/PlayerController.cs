@@ -1,50 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PlayerController : MonoBehaviour
+namespace Tutorial2
 {
-    public UnityAction<int, GameObject> onPlayerSpawned;
+    public class PlayerController : MonoBehaviour
+    {
+        [SerializeField] private float hp = 100f;
+        private UnityAction<int, GameObject> _onPlayerSpawned;
 
-    [SerializeField] private float hp = 100f;
+        // Ensure that the GameManager is a Singleton
+        private static PlayerController _instance;
+        
+        public static PlayerController Instance => _instance;
 
-    private static PlayerController instance;
-
-    // Ensure that the GameManager is a Singleton
-    public static PlayerController Instance
-    { 
-        get
+        private void Awake()
         {
-            return instance;
+            _instance = this;
+
+            GameManager.Instance.onGameStart.AddListener(InitPlayer);
         }
-    }
 
-    void Awake()
-    {
-        instance = this;
+        private void OnEnable()
+        {
+            _onPlayerSpawned += PlayerSpawned;
+        }
 
-        GameManager.Instance.onGameStart.AddListener(InitPlayer);
-    }
+        private void InitPlayer(int value, GameObject player)
+        {
+            _onPlayerSpawned?.Invoke(1, gameObject);
+        }
 
-    void OnEnable()
-    {
-        onPlayerSpawned += PlayerSpawned;
-    }
-    
-    public void InitPlayer( int value, GameObject player)
-    {
-        onPlayerSpawned?.Invoke(1, this.gameObject);
-    }
-
-    public void PlayerSpawned(int value, GameObject player)
-    {
-        hp = 0f;
-        Debug.Log($"Player Spawned with {hp} hp; Object name: {player.name}");
-    }
-
-    void OnDisable()
-    {
-        onPlayerSpawned -= PlayerSpawned;
+        private void PlayerSpawned(int value, GameObject player)
+        {
+            hp = 0f;
+            Debug.Log($"Player Spawned with {hp} hp; Object name: {player.name}");
+        }
+        
+        private void OnDisable()
+        {
+            _onPlayerSpawned -= PlayerSpawned;
+        }
     }
 }
